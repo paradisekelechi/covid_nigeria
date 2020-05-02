@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
 import { Title, ModeType, ContentText } from '../common/Typography';
 import { Container, BlockWrapper, Wrapper } from '../common/Layout';
 import { Switch, SwitchInput, SwitchSlider, Loader } from '../common/Modules';
 import Colors from '../common/Colors';
 import Card from './Card';
-import EntryRow, { getFormattedNumber } from './EntryRow';
+import { getFormattedNumber } from './utils';
 
 export interface PageProps {
 }
 
-const Page: React.FunctionComponent<PageProps> = () => {
+const GET_STATS = gql`
+    {
+        latest{
+            confirmed
+            recoveries
+            deaths
+        }
+    }
+`;
+
+const Page: any = () => {
     const [mode, setMode] = useState('light');
     const [checked, setChecked] = useState(false);
-    const [cases, setCases] = useState(0);
-    const [deaths, setDeaths] = useState(0);
-    const [recovered, setRecovered] = useState(0);
-    const [active, setActive] = useState(0);
-    const [countriesData, setCountriesData] = useState([]);
-    const [affectedCountries, setAffectedCountries] = useState(0);
 
     const handleToggleSwitch = () => {
         setChecked(!checked);
@@ -27,58 +32,39 @@ const Page: React.FunctionComponent<PageProps> = () => {
         } else {
             setMode('dark');
         }
-
     };
+    const { error, loading, data } = useQuery(GET_STATS);
 
-    useEffect(() => {
-        axios.get('https://corona.lmao.ninja/v2/all')
-            .then(res => {
-                const { cases, deaths, recovered, active, affectedCountries } = res.data;
-                setCases(cases);
-                setDeaths(deaths);
-                setRecovered(recovered);
-                setActive(active);
-                setAffectedCountries(affectedCountries);
-            });
-
-        axios.get('https://corona.lmao.ninja/v2/countries')
-            .then(response => {
-                setCountriesData(response.data);
-            })
-    }, []);
+    if (loading) return <Loader mode={mode as ModeType} />;
+    if (error) {
+        return <div>Error...</div>
+    }
+    const { confirmed, deaths: death_, recoveries } = data?.latest;
 
     return (
         <Container mode={mode as ModeType} >
-            {countriesData && countriesData.length > 0 ? (
-                <BlockWrapper spacing="none">
-                    <Wrapper spacing='none' alignment='space-between'>
-                        <Title mainHeader={true} mode={mode as ModeType} >Covid-19 Reports </Title>
-                        <Switch>
-                            <SwitchInput checked={checked} onClick={handleToggleSwitch} />
-                            <SwitchSlider checked={checked} />
-                        </Switch>
+            <BlockWrapper spacing="none">
+                <Wrapper spacing='none' alignment='space-between'>
+                    <Title mainHeader={true} mode={mode as ModeType} >Covid-19 Reports </Title>
+                    <Switch>
+                        <SwitchInput checked={checked} onClick={handleToggleSwitch} />
+                        <SwitchSlider checked={checked} />
+                    </Switch>
+                </Wrapper>
+
+                <BlockWrapper spacing='large'>
+                    <ContentText mode={mode as ModeType}>Cumulative Reports for Nigeria</ContentText>
+                    <Wrapper spacing='medium' alignment='space-between' shouldWrap={true}>
+                        <Card color={Colors.darkBlue} mode={mode as ModeType} title={getFormattedNumber(confirmed)} text='Total Cases' />
+                        <Card color={Colors.maroon} mode={mode as ModeType} title={getFormattedNumber(death_)} text='Deaths' />
+                        <Card color={Colors.darkGreen} mode={mode as ModeType} title={getFormattedNumber(recoveries)} text='Recovered' />
+                        <Card color={Colors.armyGreen} mode={mode as ModeType} title={getFormattedNumber(confirmed - recoveries - death_)} text='Active Cases' />
                     </Wrapper>
-
-                    <BlockWrapper spacing='large'>
-                        <ContentText mode={mode as ModeType}>Cumulative Reports for {affectedCountries} countries</ContentText>
-                        <Wrapper spacing='medium' alignment='space-between'>
-                            <Card color={Colors.darkBlue} mode={mode as ModeType} title={getFormattedNumber(cases)} text='Total Cases' />
-                            <Card color={Colors.maroon} mode={mode as ModeType} title={getFormattedNumber(deaths)} text='Deaths' />
-                            <Card color={Colors.darkGreen} mode={mode as ModeType} title={getFormattedNumber(recovered)} text='Recovered' />
-                            <Card color={Colors.armyGreen} mode={mode as ModeType} title={getFormattedNumber(active)} text='Active Cases' />
-                        </Wrapper>
-                    </BlockWrapper>
-
-                    <BlockWrapper spacing='large'>
-                        <ContentText mode={mode as ModeType}>Reports by Countries</ContentText>
-                        <BlockWrapper spacing='medium'>
-                            {countriesData && countriesData.length > 0 && countriesData.map((entryData, i) => <EntryRow key={i} mode={mode as ModeType} data={entryData} />)}
-                        </BlockWrapper>
-                    </BlockWrapper>
                 </BlockWrapper>
-            ) : <Loader mode={mode as ModeType} />}
+
+            </BlockWrapper>
         </Container>
-    );
+    )
 };
 
 export default Page;

@@ -51,9 +51,6 @@ export const SwitchSlider = styled.span<ToggleType>`
     }
 `;
 
-export const Flag = styled.img`
-`;
-
 const spinLoader = () => keyframes`
     0%{
         transform: rotate(0deg);

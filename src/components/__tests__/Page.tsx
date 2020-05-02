@@ -10,12 +10,6 @@ describe('Page', () => {
     });
     it('renders properly', () => {
         const wrapper = mount(<Page />);
-
-        console.log(wrapper.debug());
-
-        console.log(wrapper.find('StyledComponent').length);
-
-
         expect(wrapper.find('StyledComponent')).toHaveLength(2);
     })
 });

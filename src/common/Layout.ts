@@ -14,6 +14,10 @@ export const Container = styled.div<ContainerType>`
     box-sizing: border-box;
     margin: 0px;
     transition: all 800ms;
+
+    @media (max-width: 630px) {
+        padding: 20px;
+    }
 `;
 
 export type SpacingType = 'none' | 'small' | 'medium' | 'large';
@@ -23,6 +27,7 @@ type WrapperType = {
     spacing: SpacingType;
     alignment?: AlignmentType;
     mode?: ModeType;
+    shouldWrap?: boolean;
 }
 
 export const BlockWrapper = styled.div<WrapperType>`
@@ -43,6 +48,7 @@ export const BlockWrapper = styled.div<WrapperType>`
                 return '0px';
         }
     }};
+    flex-wrap: ${props => props.shouldWrap ? 'wrap' : 'no-wrap'};
 `;
 
 
@@ -68,6 +74,7 @@ export const Card = styled.div<{ color?: string, mode: ModeType }>`
     width: 22%;
     padding: 35px 0px;
     box-sizing: border-box;
+    margin-top: 22px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -76,16 +83,15 @@ export const Card = styled.div<{ color?: string, mode: ModeType }>`
     box-shadow: 0px 3px 20px ${props => props.mode && props.mode === 'dark' ? Colors.skyBlue : Colors.darkBlue};
     background-color: ${props => props.color};
     border-top: 2px solid ${props => props.mode && props.mode === 'dark' ? Colors.skyBlue : Colors.darkBlue};
-`;
 
-export const ContentRow = styled(Wrapper)`
-    border: 1px solid ${props => props.mode && props.mode === 'dark' ? Colors.skyBlue : Colors.darkBlue};
-    padding: 20px;
-`;
+    @media (max-width: 1130px) {
+        width: 45%;
+    }
 
-export const ContentRowUnit = styled.div`
-    width: 12%;
+    @media (max-width: 630px) {
+        width: 85%;
+        margin: 22px auto;
+    }
 `;
-
 
 

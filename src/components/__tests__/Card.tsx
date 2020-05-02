@@ -2,9 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import Colors from '../../common/Colors';
-import {ModeType} from '../../common/Typography';
+import { ModeType } from '../../common/Typography';
 import Card from '../Card';
-import {getFormattedNumber} from '../EntryRow';
+import { getFormattedNumber } from '../utils';
 
 describe('Card', () => {
     const props = {
