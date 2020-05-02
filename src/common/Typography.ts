@@ -15,6 +15,10 @@ export const Title = styled.h3<TitleType>`
   line-height: 47px;
   color: ${props => props.mode === 'dark' ? Colors.skyBlue : Colors.darkBlue};
   margin: 0px;
+
+  @media screen  and (max-width: 630px){
+    font-size: 24px;
+  }
 `;
 
 type ContentTextType = {
@@ -28,6 +32,10 @@ export const ContentText = styled.p<ContentTextType>`
   font-size: ${props => props.basic ? '1.1em' : '1.4em'};
   font-weight: ${props => props.bold ? '600' : 'normal'};
   color: ${props => props.mode === 'dark' ? Colors.skyBlue : Colors.darkBlue};
+
+  @media screen and (max-width: 630px){
+    font-size: ${props => props.basic ? '1em' : '1.2em'};
+  }
 `;
 
 const StatText = styled.h2`
