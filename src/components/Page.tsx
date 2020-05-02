@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { Title, ModeType, ContentText } from '../common/Typography';
@@ -25,7 +25,8 @@ const Page: any = () => {
     const [mode, setMode] = useState('light');
     const [checked, setChecked] = useState(false);
 
-    const handleToggleSwitch = () => {
+    const handleToggleSwitch = (event: MouseEvent) => {
+        event.preventDefault();
         setChecked(!checked);
         if (mode === 'dark') {
             setMode('light');
