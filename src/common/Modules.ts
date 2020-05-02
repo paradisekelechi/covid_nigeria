@@ -71,4 +71,10 @@ export const Loader = styled.div<{ mode: ModeType; }>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    @media screen and (max-width: 630px) {
+        width: 58px;
+        height: 58px;
+        left: 43%;
+    }
 `;
