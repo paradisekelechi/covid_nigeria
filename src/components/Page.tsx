@@ -48,7 +48,7 @@ const Page: any = () => {
                 <Wrapper spacing='none' alignment='space-between'>
                     <Title mainHeader={true} mode={mode as ModeType} >Covid-19 Reports </Title>
                     <Switch>
-                        <SwitchInput checked={checked} onClick={handleToggleSwitch} />
+                        <SwitchInput checked={checked} onClick={handleToggleSwitch} type="button" />
                         <SwitchSlider checked={checked} />
                     </Switch>
                 </Wrapper>
